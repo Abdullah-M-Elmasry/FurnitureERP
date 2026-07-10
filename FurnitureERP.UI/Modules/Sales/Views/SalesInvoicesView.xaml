@@ -1,0 +1,198 @@
+﻿<UserControl x:Class="FurnitureERP.UI.Modules.Sales.Views.SalesInvoicesView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:converters="clr-namespace:FurnitureERP.UI.Converters"
+             xmlns:controls="clr-namespace:FurnitureERP.UI.Common.Controls">
+
+    <UserControl.Resources>
+
+        <converters:InvoiceStatusColorConverter
+            x:Key="InvoiceStatusColorConverter"/>
+
+    </UserControl.Resources>
+
+    <controls:ERPListPage
+        Title="Sales Invoices"
+        Subtitle="Manage customer sales invoices">
+
+        <!-- ================= TOOLBAR ================= -->
+
+        <controls:ERPListPage.ToolbarContent>
+
+            <controls:ERPToolbar>
+
+                <controls:ERPToolbar.LeftContent>
+
+                    <StackPanel Orientation="Horizontal">
+
+                        <Button Content="New Invoice"
+                                Style="{StaticResource ERPPrimaryButton}"
+                                Margin="0,0,8,0"
+                                Command="{Binding NewInvoiceCommand}" />
+
+                        <Button Content="Refresh"
+                                Style="{StaticResource ERPSecondaryButton}"
+                                Command="{Binding RefreshCommand}" />
+
+                    </StackPanel>
+
+                </controls:ERPToolbar.LeftContent>
+
+                <controls:ERPToolbar.CenterContent>
+
+                    <TextBox Width="250"
+                             Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                             materialDesign:HintAssist.Hint="Search invoice..."
+                             Text="{Binding SearchText,
+                                            UpdateSourceTrigger=PropertyChanged}" />
+
+                </controls:ERPToolbar.CenterContent>
+
+            </controls:ERPToolbar>
+
+        </controls:ERPListPage.ToolbarContent>
+
+        <!-- ================= GRID ================= -->
+
+        <controls:ERPListPage.Content>
+
+            <materialDesign:Card Padding="10"
+                                 UniformCornerRadius="8">
+
+                <DataGrid
+                    ItemsSource="{Binding Items}"
+                    SelectedItem="{Binding SelectedItem}"
+                    AutoGenerateColumns="False"
+                    HorizontalAlignment="Stretch"
+                    HorizontalScrollBarVisibility="Auto"
+                    MouseDoubleClick="DataGrid_MouseDoubleClick">
+
+                    <DataGrid.Columns>
+
+                        <DataGridTemplateColumn Header="Invoice No"
+                                                Width="150">
+
+                            <DataGridTemplateColumn.CellTemplate>
+
+                                <DataTemplate>
+
+                                    <Button
+                                        Style="{x:Null}"
+                                        Background="Transparent"
+                                        BorderThickness="0"
+                                        Cursor="Hand"
+                                        HorizontalAlignment="Left"
+                                        FontWeight="SemiBold"
+                                        Foreground="#1976D2"
+                                        Command="{Binding DataContext.OpenInvoiceCommand,
+                                                          RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                        CommandParameter="{Binding}">
+
+                                        <TextBlock Text="{Binding InvoiceNumber}"
+                                                   TextDecorations="Underline"/>
+
+                                    </Button>
+
+                                </DataTemplate>
+
+                            </DataGridTemplateColumn.CellTemplate>
+
+                        </DataGridTemplateColumn>
+
+                        <DataGridTextColumn Header="Date"
+                                            Width="110"
+                                            Binding="{Binding Date}" />
+
+                        <DataGridTextColumn Header="Customer"
+                                            Width="*"
+                                            Binding="{Binding CustomerName}" />
+
+                        <DataGridTemplateColumn Header="Status"
+                                                Width="120">
+
+                            <DataGridTemplateColumn.CellTemplate>
+
+                                <DataTemplate>
+
+                                    <Border Padding="10,4"
+                                            CornerRadius="15"
+                                            HorizontalAlignment="Center"
+                                            Background="{Binding Status,
+                                                                 Converter={StaticResource InvoiceStatusColorConverter}}">
+
+                                        <TextBlock Text="{Binding Status}"
+                                                   Foreground="White"
+                                                   FontWeight="SemiBold"/>
+
+                                    </Border>
+
+                                </DataTemplate>
+
+                            </DataGridTemplateColumn.CellTemplate>
+
+                        </DataGridTemplateColumn>
+
+                        <DataGridTextColumn Header="Grand Total"
+                                            Width="120"
+                                            Binding="{Binding GrandTotal}" />
+
+                        <DataGridTextColumn Header="Paid"
+                                            Width="120"
+                                            Binding="{Binding PaidAmount}" />
+
+                        <DataGridTextColumn Header="Remaining"
+                                            Width="120"
+                                            Binding="{Binding RemainingAmount}" />
+
+                        <DataGridTemplateColumn Header=""
+                                                Width="90">
+
+                            <DataGridTemplateColumn.CellTemplate>
+
+                                <DataTemplate>
+
+                                    <controls:ERPRowActions
+
+                                        ShowView="True"
+                                        ShowEdit="False"
+                                        ShowPrint="True"
+                                        ShowDelete="False"
+
+                                        ViewCommand="{Binding DataContext.ViewInvoiceCommand,
+                                                              RelativeSource={RelativeSource AncestorType=DataGrid}}"
+
+                                        PrintCommand="{Binding DataContext.PrintInvoiceCommand,
+                                                               RelativeSource={RelativeSource AncestorType=DataGrid}}" />
+
+                                </DataTemplate>
+
+                            </DataGridTemplateColumn.CellTemplate>
+
+                        </DataGridTemplateColumn>
+
+                    </DataGrid.Columns>
+
+                </DataGrid>
+
+            </materialDesign:Card>
+
+        </controls:ERPListPage.Content>
+
+        <!-- ================= PAGINATION ================= -->
+
+        <controls:ERPListPage.PaginationContent>
+
+            <controls:ERPPagination
+                CurrentPage="{Binding CurrentPage}"
+                TotalPages="{Binding TotalPages}"
+                PreviousCommand="{Binding PreviousPageCommand}"
+                NextCommand="{Binding NextPageCommand}"
+                FirstCommand="{Binding FirstPageCommand}"
+                LastCommand="{Binding LastPageCommand}" />
+
+        </controls:ERPListPage.PaginationContent>
+
+    </controls:ERPListPage>
+
+</UserControl>

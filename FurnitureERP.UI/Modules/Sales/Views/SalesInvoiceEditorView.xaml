@@ -1,0 +1,483 @@
+﻿<UserControl x:Class="FurnitureERP.UI.Modules.Sales.Views.SalesInvoiceEditorView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:controls="clr-namespace:FurnitureERP.UI.Common.Controls"
+             xmlns:lookupControls="clr-namespace:FurnitureERP.UI.Common.Controls.Lookup"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:converters="clr-namespace:FurnitureERP.UI.Converters"
+             mc:Ignorable="d">
+
+    <UserControl.Resources>
+
+        <converters:InvoiceStatusColorConverter
+            x:Key="InvoiceStatusColorConverter"/>
+
+    </UserControl.Resources>
+
+    <controls:ERPPageLayout
+        Title="Sales Invoice"
+        Subtitle="Create and manage sales invoices">
+
+        <!-- ================= Toolbar ================= -->
+
+        <controls:ERPPageLayout.ToolbarContent>
+
+            <StackPanel Orientation="Horizontal">
+
+                <Button Content="Save Draft"
+                        Width="120"
+                        Margin="0,0,10,0"
+                        Visibility="{Binding ShowSaveDraft,
+                                             Converter={StaticResource BooleanToVisibilityConverter}}"
+                        Command="{Binding SaveDraftCommand}" />
+
+                <Button Content="Confirm"
+                        Width="120"
+                        Margin="0,0,10,0"
+                        Visibility="{Binding ShowConfirm,
+                                             Converter={StaticResource BooleanToVisibilityConverter}}"
+                        Command="{Binding ConfirmCommand}" />
+
+                <Button Content="Cancel Invoice"
+                        Width="120"
+                        Visibility="{Binding ShowCancel,
+                                             Converter={StaticResource BooleanToVisibilityConverter}}"
+                        Command="{Binding CancelInvoiceCommand}" />
+
+            </StackPanel>
+
+        </controls:ERPPageLayout.ToolbarContent>
+
+        <!-- ================= Content ================= -->
+
+        <controls:ERPPageLayout.ContentArea>
+
+            <ScrollViewer VerticalScrollBarVisibility="Auto">
+
+                <StackPanel>
+
+                    <!-- ================= Header ================= -->
+
+                    <materialDesign:Card
+                        Margin="0,0,0,15"
+                        Padding="20">
+
+                        <Grid>
+
+                            <Grid.RowDefinitions>
+
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+
+                            </Grid.RowDefinitions>
+
+                            <!-- Status -->
+
+                            <Border HorizontalAlignment="Right"
+                                    Padding="16,6"
+                                    CornerRadius="20"
+                                    Background="{Binding Status,
+                                                         Converter={StaticResource InvoiceStatusColorConverter}}">
+
+                                <TextBlock Text="{Binding Status}"
+                                           Foreground="White"
+                                           FontWeight="SemiBold"
+                                           HorizontalAlignment="Center"/>
+
+                            </Border>
+
+                            <!-- Invoice Info -->
+
+                            <Grid Grid.Row="1"
+                                  Margin="0,20,0,0">
+
+                                <Grid.ColumnDefinitions>
+
+                                    <ColumnDefinition Width="250"/>
+                                    <ColumnDefinition Width="180"/>
+                                    <ColumnDefinition Width="180"/>
+
+                                </Grid.ColumnDefinitions>
+
+                                <TextBox
+                                    Text="{Binding DisplayInvoiceNumber,
+                                                   Mode=OneWay}"
+                                    IsReadOnly="True"
+                                    Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                                    materialDesign:HintAssist.Hint="Invoice Number"/>
+
+                                <DatePicker
+                                    Grid.Column="1"
+                                    Margin="10,0,0,0"
+                                    SelectedDate="{Binding Date}"/>
+
+                                <DatePicker
+                                    Grid.Column="2"
+                                    Margin="10,0,0,0"
+                                    SelectedDate="{Binding DueDate}"/>
+
+                            </Grid>
+
+                            <!-- Customer -->
+
+                            <lookupControls:ERPAdvancedLookup
+                                Grid.Row="2"
+                                Margin="0,20,0,0"
+                                Label="Customer"
+                                Hint="Search customer..."
+                                EmptyText="Create Customer"
+                                IsRequired="True"
+                                IsEnabled="{Binding CanEdit}"
+                                ItemsSource="{Binding Customers}"
+                                SelectedItem="{Binding SelectedCustomer}"
+                                AddCommand="{Binding AddCustomerCommand}"
+                                SearchMemberPaths="Name,Phone"
+                                DisplayMemberPath="Name">
+
+                                <lookupControls:ERPAdvancedLookup.ItemTemplate>
+
+                                    <DataTemplate>
+
+                                        <TextBlock Margin="8,4"
+                                                   Text="{Binding Name}"
+                                                   FontWeight="SemiBold"/>
+
+                                    </DataTemplate>
+
+                                </lookupControls:ERPAdvancedLookup.ItemTemplate>
+
+                            </lookupControls:ERPAdvancedLookup>
+
+                        </Grid>
+
+                    </materialDesign:Card>
+
+                    <!-- ================= Items ================= -->
+
+                    <materialDesign:Card Padding="15">
+
+                        <StackPanel>
+
+                            <DockPanel Margin="0,0,0,10">
+
+                                <TextBlock Text="Invoice Items"
+                       FontSize="18"
+                       FontWeight="SemiBold"
+                       VerticalAlignment="Center"/>
+
+                                <Button DockPanel.Dock="Right"
+                    Width="120"
+                    Content="+ Add Row"
+                    IsEnabled="{Binding CanEdit}"
+                    Command="{Binding AddItemCommand}" />
+
+                            </DockPanel>
+
+                            <DataGrid
+            AutoGenerateColumns="False"
+            CanUserAddRows="False"
+            HeadersVisibility="Column"
+            ItemsSource="{Binding Items}"
+            IsReadOnly="{Binding CanEdit,
+                                 Converter={StaticResource InverseBooleanConverter}}">
+
+                                <DataGrid.Columns>
+
+                                    <!-- Product -->
+
+                                    <DataGridTemplateColumn
+                    Header="Product"
+                    Width="300">
+
+                                        <DataGridTemplateColumn.CellTemplate>
+
+                                            <DataTemplate>
+
+                                                <Grid>
+
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="*" />
+                                                        <ColumnDefinition Width="24" />
+                                                    </Grid.ColumnDefinitions>
+
+                                                    <lookupControls:ERPAdvancedLookup
+ShowLabel="False"
+Hint="Product"
+
+ItemsSource="{Binding DataContext.Products,
+                      RelativeSource={RelativeSource AncestorType=DataGrid}}"
+
+SelectedItem="{Binding Product,
+                       Mode=TwoWay,
+                       UpdateSourceTrigger=PropertyChanged}"
+
+SearchMemberPaths="Code,Name,Barcode"
+
+AddCommand="{Binding DataContext.AddProductCommand,
+                     RelativeSource={RelativeSource AncestorType=DataGrid}}"
+
+DisplayMemberPath="Name">
+
+                                                        <lookupControls:ERPAdvancedLookup.ItemTemplate>
+
+                                                            <DataTemplate>
+
+                                                                <TextBlock
+            Margin="8,4"
+            Text="{Binding Name}"
+            FontWeight="SemiBold"/>
+
+                                                            </DataTemplate>
+
+                                                        </lookupControls:ERPAdvancedLookup.ItemTemplate>
+
+                                                    </lookupControls:ERPAdvancedLookup>
+
+
+
+                                                    <materialDesign:PackIcon
+    Grid.Column="1"
+    Width="22"
+    Height="22"
+    HorizontalAlignment="Center"
+    VerticalAlignment="Center"
+    ToolTipService.InitialShowDelay="0"
+    ToolTipService.ShowDuration="60000">
+
+                                                        <materialDesign:PackIcon.Style>
+
+                                                            <Style TargetType="materialDesign:PackIcon">
+
+                                                                <Setter Property="Kind"
+                    Value="CheckCircle"/>
+
+                                                                <Setter Property="Foreground"
+                    Value="{StaticResource SuccessBrush}"/>
+
+                                                                <Style.Triggers>
+
+                                                                    <DataTrigger Binding="{Binding HasEnoughStock}"
+                             Value="False">
+
+                                                                        <Setter Property="Kind"
+                            Value="CloseCircle"/>
+
+                                                                        <Setter Property="Foreground"
+                            Value="{StaticResource DangerBrush}"/>
+
+                                                                    </DataTrigger>
+
+                                                                </Style.Triggers>
+
+                                                            </Style>
+
+                                                        </materialDesign:PackIcon.Style>
+
+                                                        <materialDesign:PackIcon.ToolTip>
+
+                                                            <ToolTip>
+                                                                <TextBlock Text="{Binding AvailableStock,
+                                      StringFormat=Available : {0}}"/>
+                                                            </ToolTip>
+
+                                                        </materialDesign:PackIcon.ToolTip>
+
+                                                    </materialDesign:PackIcon>
+
+
+
+                                                </Grid>
+                                            </DataTemplate>
+
+                                        </DataGridTemplateColumn.CellTemplate>
+
+                                    </DataGridTemplateColumn>
+
+                                    <!-- Quantity -->
+
+                                    <DataGridTemplateColumn
+                    Header="Qty"
+                    Width="90">
+
+                                        <DataGridTemplateColumn.CellTemplate>
+
+                                            <DataTemplate>
+
+                                                <TextBox
+                                Text="{Binding Quantity,
+                                               UpdateSourceTrigger=PropertyChanged}" />
+
+                                            </DataTemplate>
+
+                                        </DataGridTemplateColumn.CellTemplate>
+
+                                    </DataGridTemplateColumn>
+
+                                    <!-- Sale Price -->
+
+                                    <DataGridTemplateColumn
+                    Header="Sale Price"
+                    Width="120">
+
+                                        <DataGridTemplateColumn.CellTemplate>
+
+                                            <DataTemplate>
+
+                                                <TextBox
+                                Text="{Binding SalePrice,
+                                               UpdateSourceTrigger=PropertyChanged}" />
+
+                                            </DataTemplate>
+
+                                        </DataGridTemplateColumn.CellTemplate>
+
+                                    </DataGridTemplateColumn>
+
+                                    <!-- Total -->
+
+                                    <DataGridTextColumn
+                    Header="Total"
+                    Width="120"
+                    IsReadOnly="True"
+                    Binding="{Binding Total,
+                                      StringFormat=N2}" />
+
+                                    <!-- Delete -->
+
+                                    <DataGridTemplateColumn
+                    Width="70">
+
+                                        <DataGridTemplateColumn.CellTemplate>
+
+                                            <DataTemplate>
+
+                                                <Button
+                                Width="36"
+                                Height="36"
+                                Padding="0"
+                                Style="{StaticResource MaterialDesignIconButton}"
+                                ToolTip="Delete Item"
+
+                                Command="{Binding DataContext.RemoveItemCommand,
+                                                  RelativeSource={RelativeSource AncestorType=DataGrid}}"
+
+                                CommandParameter="{Binding}">
+
+                                                    <materialDesign:PackIcon
+                                    Kind="DeleteOutline"
+                                    Width="18"
+                                    Height="18"/>
+
+                                                </Button>
+
+                                            </DataTemplate>
+
+                                        </DataGridTemplateColumn.CellTemplate>
+
+                                    </DataGridTemplateColumn>
+
+                                </DataGrid.Columns>
+
+                            </DataGrid>
+
+                        </StackPanel>
+
+                    </materialDesign:Card>
+
+                    <!-- ================= Totals ================= -->
+
+                    <materialDesign:Card
+    Margin="0,15,0,0"
+    Padding="20">
+
+                        <Grid>
+
+                            <Grid.ColumnDefinitions>
+
+                                <ColumnDefinition Width="*"/>
+
+                                <ColumnDefinition Width="250"/>
+
+                            </Grid.ColumnDefinitions>
+
+                            <StackPanel Grid.Column="1">
+
+                                <TextBox
+                Margin="0,0,0,10"
+                Text="{Binding Discount}"
+                IsEnabled="{Binding CanEdit}"
+                Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                materialDesign:HintAssist.Hint="Discount"/>
+
+                                <TextBox
+                Margin="0,0,0,10"
+                Text="{Binding Tax}"
+                IsEnabled="{Binding CanEdit}"
+                Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                materialDesign:HintAssist.Hint="Tax"/>
+
+                                <TextBox
+                Margin="0,0,0,10"
+                Text="{Binding PaidAmount}"
+                IsEnabled="{Binding CanEdit}"
+                Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                materialDesign:HintAssist.Hint="Paid Amount"/>
+
+                                <Separator Margin="0,5"/>
+
+                                <TextBlock
+                FontSize="16"
+                FontWeight="SemiBold"
+                Text="{Binding SubTotal,
+                               StringFormat=Sub Total: {0:N2}}"/>
+
+                                <TextBlock
+                Margin="0,10,0,0"
+                FontSize="20"
+                FontWeight="Bold"
+                Text="{Binding GrandTotal,
+                               StringFormat=Grand Total: {0:N2}}"/>
+
+                                <TextBlock
+                Margin="0,10,0,0"
+                FontSize="18"
+                FontWeight="Bold"
+                Foreground="DarkRed"
+                Text="{Binding RemainingAmount,
+                               StringFormat=Remaining: {0:N2}}"/>
+
+                            </StackPanel>
+
+                        </Grid>
+
+                    </materialDesign:Card>
+
+                    <!-- ================= Notes ================= -->
+
+                    <materialDesign:Card
+    Margin="0,15,0,0"
+    Padding="20">
+
+                        <TextBox
+        Text="{Binding Notes}"
+        IsEnabled="{Binding CanEdit}"
+        AcceptsReturn="True"
+        MinHeight="120"
+        VerticalScrollBarVisibility="Auto"
+        Style="{StaticResource MaterialDesignOutlinedTextBox}"
+        materialDesign:HintAssist.Hint="Notes"/>
+
+                    </materialDesign:Card>
+
+                </StackPanel>
+
+            </ScrollViewer>
+
+        </controls:ERPPageLayout.ContentArea>
+
+    </controls:ERPPageLayout>
+
+</UserControl>

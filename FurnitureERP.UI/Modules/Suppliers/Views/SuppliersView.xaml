@@ -1,0 +1,245 @@
+﻿<UserControl x:Class="FurnitureERP.UI.Modules.Suppliers.Views.SuppliersView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:controls="clr-namespace:FurnitureERP.UI.Common.Controls">
+
+    <controls:ERPListPage
+    Title="Suppliers"
+    Subtitle="Manage suppliers and contact information">
+
+        <!-- TOOLBAR -->
+        <controls:ERPListPage.ToolbarContent>
+
+            <controls:ERPToolbar>
+
+                <controls:ERPToolbar.LeftContent>
+
+                    <StackPanel Orientation="Horizontal">
+
+                        <Button Content="Add Supplier"
+                            Style="{StaticResource ERPPrimaryButton}"
+                            Margin="0,0,8,0"
+                            Command="{Binding OpenAddSupplierCommand}"/>
+
+                        <Button Content="Refresh"
+                            Style="{StaticResource ERPSecondaryButton}"
+                            Command="{Binding RefreshCommand}"/>
+
+                    </StackPanel>
+
+                </controls:ERPToolbar.LeftContent>
+
+
+                <controls:ERPToolbar.CenterContent>
+
+                    <TextBox Width="250"
+                         Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                         materialDesign:HintAssist.Hint="Search supplier..."
+                         Text="{Binding SearchText,
+                                        UpdateSourceTrigger=PropertyChanged}"/>
+
+                </controls:ERPToolbar.CenterContent>
+
+            </controls:ERPToolbar>
+
+        </controls:ERPListPage.ToolbarContent>
+
+
+        <!-- GRID -->
+        <controls:ERPListPage.Content>
+
+            <materialDesign:Card Padding="10"
+                              UniformCornerRadius="8">
+
+                <DataGrid ItemsSource="{Binding Items}"
+                      SelectedItem="{Binding SelectedItem}">
+
+                    <DataGrid.Columns>
+
+                        <DataGridTextColumn Header="Name"
+                                        Binding="{Binding Name}" />
+
+                        <DataGridTextColumn Header="Phone"
+                                        Binding="{Binding Phone}" />
+
+                        <DataGridTextColumn Header="Email"
+                                        Width="2*"
+                                        Binding="{Binding Email}" />
+
+                        <DataGridTextColumn Header="Address"
+                                        Width="2*"
+                                        Binding="{Binding Address}" />
+
+                        <DataGridTemplateColumn Header="Actions"
+                                            Width="120">
+
+                            <DataGridTemplateColumn.CellTemplate>
+
+                                <DataTemplate>
+
+                                    <controls:ERPActionButtons
+                                    Item="{Binding}"
+                                    EditCommand="{Binding DataContext.EditSupplierCommand,
+                                    RelativeSource={RelativeSource AncestorType=DataGrid}}"
+
+                                    DeleteCommand="{Binding DataContext.DeleteSupplierCommand,
+                                    RelativeSource={RelativeSource AncestorType=DataGrid}}"/>
+
+                                </DataTemplate>
+
+                            </DataGridTemplateColumn.CellTemplate>
+
+                        </DataGridTemplateColumn>
+
+                    </DataGrid.Columns>
+
+                </DataGrid>
+
+            </materialDesign:Card>
+
+        </controls:ERPListPage.Content>
+
+
+        <!-- PAGINATION -->
+        <controls:ERPListPage.PaginationContent>
+
+            <controls:ERPPagination
+            CurrentPage="{Binding CurrentPage}"
+            TotalPages="{Binding TotalPages}"
+            PreviousCommand="{Binding PreviousPageCommand}"
+            NextCommand="{Binding NextPageCommand}"
+            FirstCommand="{Binding FirstPageCommand}"
+            LastCommand="{Binding LastPageCommand}"/>
+
+        </controls:ERPListPage.PaginationContent>
+
+    </controls:ERPListPage>
+
+    <!--<Grid Margin="20">
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+
+        --><!-- Header --><!--
+
+        <StackPanel Grid.Row="0"
+                    Margin="0,0,0,20">
+
+            <TextBlock Text="Suppliers"
+                       FontSize="28"
+                       FontWeight="SemiBold"/>
+
+            <TextBlock Text="Manage suppliers and contact information"
+                       Foreground="{StaticResource HintBrush}"/>
+
+        </StackPanel>
+
+
+
+
+        <controls:ERPToolbar Grid.Row="1">
+
+            --><!-- LEFT ACTIONS --><!--
+            <controls:ERPToolbar.LeftContent>
+
+                <StackPanel Orientation="Horizontal">
+
+                    <Button Content="Add Supplier"
+                    Style="{StaticResource ERPPrimaryButton}"
+                    Margin="0,0,8,0"
+                    Command="{Binding OpenAddSupplierCommand}"/>
+
+                    <Button Content="Refresh"
+                    Style="{StaticResource ERPSecondaryButton}"
+                    Command="{Binding RefreshCommand}"/>
+
+                </StackPanel>
+
+            </controls:ERPToolbar.LeftContent>
+
+
+            --><!-- CENTER SEARCH (Material Design FULL) --><!--
+            <controls:ERPToolbar.CenterContent>
+
+                <TextBox Width="250"
+                 Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                 materialDesign:HintAssist.Hint="Search supplier..."
+                 Text="{Binding SearchText,
+                                UpdateSourceTrigger=PropertyChanged}"/>
+
+            </controls:ERPToolbar.CenterContent>
+
+        </controls:ERPToolbar>
+
+        --><!-- Grid Card --><!--
+
+        <materialDesign:Card Grid.Row="2"
+                     Padding="10"
+                     UniformCornerRadius="8">
+
+            <DataGrid ItemsSource="{Binding Items}"
+              SelectedItem="{Binding SelectedItem}">
+
+                <DataGrid.Columns>
+
+                    <DataGridTextColumn Header="Name"
+                                Binding="{Binding Name}" />
+
+                    <DataGridTextColumn Header="Phone"
+                                Binding="{Binding Phone}" />
+
+                    <DataGridTextColumn Header="Email"
+                                Width="2*"
+                                Binding="{Binding Email}" />
+
+                    <DataGridTextColumn Header="Address"
+                                Width="2*"
+                                Binding="{Binding Address}" />
+
+                    <DataGridTemplateColumn Header="Actions"
+                                    Width="120">
+
+                        <DataGridTemplateColumn.CellTemplate>
+
+                            <DataTemplate>
+
+                                <controls:ERPActionButtons
+                            Item="{Binding}"
+                            EditCommand="{Binding DataContext.EditSupplierCommand,
+                            RelativeSource={RelativeSource AncestorType=DataGrid}}"
+
+                            DeleteCommand="{Binding DataContext.DeleteSupplierCommand,
+                            RelativeSource={RelativeSource AncestorType=DataGrid}}" />
+
+                            </DataTemplate>
+
+                        </DataGridTemplateColumn.CellTemplate>
+
+                    </DataGridTemplateColumn>
+
+                </DataGrid.Columns>
+
+            </DataGrid>
+
+        </materialDesign:Card>
+        <controls:ERPPagination
+    Grid.Row="3"
+    Margin="0,15,0,0"
+
+    CurrentPage="{Binding CurrentPage}"
+    TotalPages="{Binding TotalPages}"
+
+    PreviousCommand="{Binding PreviousPageCommand}"
+    NextCommand="{Binding NextPageCommand}"
+
+    FirstCommand="{Binding FirstPageCommand}"
+    LastCommand="{Binding LastPageCommand}"/>
+    </Grid>-->
+
+</UserControl>

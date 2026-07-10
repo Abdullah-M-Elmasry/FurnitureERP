@@ -1,0 +1,40 @@
+﻿<UserControl x:Class="FurnitureERP.UI.Common.Controls.ERPListPage"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <Grid Margin="20">
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- HEADER -->
+        <StackPanel Grid.Row="0" Margin="0,0,0,15">
+
+            <TextBlock Text="{Binding Title, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                       FontSize="28"
+                       FontWeight="SemiBold"/>
+
+            <TextBlock Text="{Binding Subtitle, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                       Foreground="Gray"/>
+
+        </StackPanel>
+
+        <!-- TOOLBAR -->
+        <ContentControl Grid.Row="1"
+                        Content="{Binding ToolbarContent, RelativeSource={RelativeSource AncestorType=UserControl}}"/>
+
+        <!-- MAIN CONTENT -->
+        <ContentControl Grid.Row="2"
+                        Content="{Binding Content, RelativeSource={RelativeSource AncestorType=UserControl}}"/>
+
+        <!-- PAGINATION -->
+        <ContentControl Grid.Row="3"
+                        Content="{Binding PaginationContent, RelativeSource={RelativeSource AncestorType=UserControl}}"/>
+
+    </Grid>
+
+</UserControl>

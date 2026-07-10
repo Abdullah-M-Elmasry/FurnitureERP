@@ -1,0 +1,474 @@
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes">
+
+    <!-- ======================================== -->
+    <!-- ERP COLOR SYSTEM -->
+    <!-- ======================================== -->
+
+    <!-- Main -->
+    <SolidColorBrush x:Key="PrimaryBrush" Color="#2563EB"/>
+    <SolidColorBrush x:Key="PrimaryDarkBrush" Color="#1D4ED8"/>
+    <SolidColorBrush x:Key="SecondaryBrush" Color="#0F172A"/>
+
+    <!-- Success -->
+    <SolidColorBrush x:Key="SuccessBrush" Color="#16A34A"/>
+
+    <!-- Danger -->
+    <SolidColorBrush x:Key="DangerBrush" Color="#DC2626"/>
+
+    <!-- Surface -->
+    <SolidColorBrush x:Key="BackgroundBrush" Color="#F8FAFC"/>
+    <SolidColorBrush x:Key="CardBrush" Color="#FFFFFF"/>
+    <SolidColorBrush x:Key="InputBrush" Color="#F8FAFC"/>
+
+    <!-- Text -->
+    <SolidColorBrush x:Key="TextBrush" Color="#0F172A"/>
+    <SolidColorBrush x:Key="HintBrush" Color="#64748B"/>
+
+    <!-- Borders -->
+    <SolidColorBrush x:Key="BorderBrushSoft" Color="#E2E8F0"/>
+
+
+    <!-- ======================================== -->
+    <!-- WINDOW -->
+    <!-- ======================================== -->
+
+    <Style TargetType="Window">
+
+        <Setter Property="Background"
+                Value="{StaticResource BackgroundBrush}"/>
+
+        <Setter Property="Foreground"
+                Value="{StaticResource TextBrush}"/>
+
+        <Setter Property="FontFamily"
+                Value="Segoe UI"/>
+
+    </Style>
+
+
+    <!-- ======================================== -->
+    <!-- TEXT -->
+    <!-- ======================================== -->
+
+    <Style TargetType="TextBlock">
+
+        <Setter Property="Foreground"
+                Value="{StaticResource TextBrush}"/>
+
+        <Setter Property="FontSize"
+                Value="13"/>
+
+        <Setter Property="VerticalAlignment"
+                Value="Center"/>
+
+    </Style>
+
+
+    
+    
+    
+    <!-- ======================================== -->
+    <!-- PRIMARY BUTTON -->
+    <!-- ======================================== -->
+
+    <Style x:Key="ERPPrimaryButton"
+       TargetType="Button"
+       BasedOn="{StaticResource MaterialDesignRaisedButton}">
+
+        <Setter Property="Width"
+            Value="140"/>
+
+        <Setter Property="Height"
+            Value="40"/>
+
+        <Setter Property="Margin"
+            Value="0,0,10,0"/>
+
+        <Setter Property="Foreground"
+            Value="White"/>
+
+        <Setter Property="Background"
+            Value="{StaticResource PrimaryBrush}"/>
+
+        <Setter Property="FontWeight"
+            Value="SemiBold"/>
+
+    </Style>
+
+
+    <!-- ======================================== -->
+    <!-- SECONDARY BUTTON -->
+    <!-- ======================================== -->
+
+    <Style x:Key="ERPSecondaryButton"
+           TargetType="Button"
+           BasedOn="{StaticResource MaterialDesignOutlinedButton}">
+
+        <Setter Property="Width"
+                Value="110"/>
+
+        <Setter Property="Height"
+                Value="40"/>
+
+        <Setter Property="FontWeight"
+                Value="SemiBold"/>
+
+    </Style>
+
+
+    <!-- ======================================== -->
+    <!-- ICON BUTTONS -->
+    <!-- ======================================== -->
+
+    <Style x:Key="ERPActionButton"
+       TargetType="Button"
+       BasedOn="{StaticResource MaterialDesignOutlinedButton}">
+
+        <Setter Property="Width"
+            Value="32"/>
+
+        <Setter Property="Height"
+            Value="32"/>
+
+        <Setter Property="MinWidth"
+            Value="32"/>
+
+        <Setter Property="MinHeight"
+            Value="32"/>
+
+        <Setter Property="Padding"
+            Value="0"/>
+
+        <Setter Property="Margin"
+            Value="2"/>
+
+        <Setter Property="BorderThickness"
+            Value="0"/>
+
+        <Setter Property="Background"
+            Value="Transparent"/>
+
+        <Setter Property="Cursor"
+            Value="Hand"/>
+
+        <Setter Property="HorizontalContentAlignment"
+            Value="Center"/>
+
+        <Setter Property="VerticalContentAlignment"
+            Value="Center"/>
+
+        <Style.Triggers>
+
+            <Trigger Property="IsMouseOver"
+                 Value="True">
+
+                <Setter Property="Background"
+                    Value="#15000000"/>
+
+            </Trigger>
+
+        </Style.Triggers>
+
+    </Style>
+
+
+    <!-- ======================================== -->
+    <!-- TEXTBOX -->
+    <!-- ======================================== -->
+
+    <Style TargetType="TextBox"
+       BasedOn="{StaticResource MaterialDesignOutlinedTextBox}">
+
+        <Setter Property="Margin"
+            Value="0,2"/>
+
+        <Setter Property="FontSize"
+            Value="13"/>
+
+        <Setter Property="Foreground"
+            Value="{StaticResource TextBrush}"/>
+
+        <Setter Property="Background"
+            Value="White"/>
+
+    </Style>
+    <!-- ======================================== -->
+    <!-- COMBOBOX -->
+    <!-- ======================================== -->
+
+    <Style TargetType="ComboBox"
+           BasedOn="{StaticResource MaterialDesignOutlinedComboBox}">
+
+        <Setter Property="Height"
+                Value="40"/>
+
+        <Setter Property="FontSize"
+                Value="13"/>
+
+    </Style>
+
+
+    <!-- ======================================== -->
+    <!-- DATAGRID -->
+    <!-- ======================================== -->
+
+    <Style TargetType="DataGrid"
+       BasedOn="{StaticResource MaterialDesignDataGrid}">
+
+        <Setter Property="CanUserAddRows"
+            Value="False"/>
+
+        <Setter Property="CanUserDeleteRows"
+            Value="False"/>
+
+        <Setter Property="AutoGenerateColumns"
+            Value="False"/>
+
+        <Setter Property="IsReadOnly"
+            Value="True"/>
+
+        <Setter Property="HeadersVisibility"
+            Value="Column"/>
+
+        <Setter Property="SelectionMode"
+            Value="Single"/>
+
+        <Setter Property="SelectionUnit"
+            Value="FullRow"/>
+
+        <Setter Property="GridLinesVisibility"
+            Value="None"/>
+
+        <!-- رجعنا البوردر -->
+        <Setter Property="BorderThickness"
+            Value="1"/>
+
+        <Setter Property="BorderBrush"
+            Value="#E5E7EB"/>
+
+        <Setter Property="ColumnWidth"
+            Value="*"/>
+
+        <Setter Property="RowHeight"
+            Value="52"/>
+
+        <!-- لون هادئ جدًا -->
+        <Setter Property="Background"
+            Value="#FCFCFD"/>
+
+        <!-- صفوف متبادلة خفيفة جدًا -->
+        <Setter Property="AlternatingRowBackground"
+            Value="#FAFBFC"/>
+
+    </Style>
+
+
+    <!-- ======================================== -->
+    <!-- HEADER -->
+    <!-- ======================================== -->
+
+    <Style TargetType="DataGridColumnHeader"
+       BasedOn="{StaticResource MaterialDesignDataGridColumnHeader}">
+
+        <Setter Property="Background"
+            Value="#F8FAFC"/>
+
+        <Setter Property="Foreground"
+            Value="{StaticResource TextBrush}"/>
+
+        <Setter Property="FontWeight"
+            Value="SemiBold"/>
+
+        <Setter Property="FontSize"
+            Value="13"/>
+
+        <Setter Property="Padding"
+            Value="14"/>
+
+    </Style>
+
+
+    <!-- ======================================== -->
+    <!-- ROW -->
+    <!-- ======================================== -->
+
+    <Style TargetType="DataGridRow"
+       BasedOn="{StaticResource MaterialDesignDataGridRow}">
+
+        <Setter Property="VerticalContentAlignment"
+            Value="Center"/>
+
+        <Setter Property="Height"
+            Value="52"/>
+
+        <Setter Property="BorderThickness"
+            Value="0,0,0,1"/>
+
+        <Setter Property="BorderBrush"
+            Value="#F1F5F9"/>
+
+        <Style.Triggers>
+
+            <!-- Hover -->
+
+            <Trigger Property="IsMouseOver"
+                 Value="True">
+
+                <Setter Property="Background"
+                    Value="#F8FAFC"/>
+
+            </Trigger>
+
+            <!-- Selected -->
+
+            <Trigger Property="IsSelected"
+                 Value="True">
+
+                <Setter Property="Background"
+                    Value="#EFF6FF"/>
+
+            </Trigger>
+
+        </Style.Triggers>
+
+    </Style>
+
+
+    <!-- ======================================== -->
+    <!-- CELL -->
+    <!-- ======================================== -->
+
+    <Style TargetType="DataGridCell"
+       BasedOn="{StaticResource MaterialDesignDataGridCell}">
+
+        <Setter Property="Padding"
+            Value="12,0"/>
+
+        <Setter Property="BorderThickness"
+            Value="0"/>
+
+        <Setter Property="VerticalContentAlignment"
+            Value="Center"/>
+
+        <Setter Property="VerticalAlignment"
+            Value="Center"/>
+
+    </Style>
+    <!-- ======================================== -->
+    <!-- Snackbar -->
+    <!-- ======================================== -->
+
+    <Style x:Key="ERPSnackbar"
+       TargetType="materialDesign:Snackbar"
+       BasedOn="{StaticResource {x:Type materialDesign:Snackbar}}">
+
+        <Setter Property="Width"
+            Value="340"/>
+
+        <Setter Property="MinHeight"
+            Value="48"/>
+
+        <Setter Property="Background"
+            Value="{StaticResource CardBrush}"/>
+
+        <Setter Property="Foreground"
+            Value="{StaticResource TextBrush}"/>
+
+        <Setter Property="Margin"
+            Value="0"/>
+
+    </Style>
+    <!-- ======================================== -->
+    <!-- TAB -->
+    <!-- ======================================== -->
+
+    <Style TargetType="TabItem">
+
+        <Setter Property="FontSize"
+                Value="13"/>
+
+        <Setter Property="FontWeight"
+                Value="SemiBold"/>
+
+    </Style>
+
+
+    <!-- ======================================== -->
+    <!-- GRID ACTION ICON -->
+    <!-- ======================================== -->
+
+    <Style x:Key="ERPGridActionIcon"
+       TargetType="materialDesign:PackIcon">
+
+        <Setter Property="Width"
+            Value="18"/>
+
+        <Setter Property="Height"
+            Value="18"/>
+
+        <Setter Property="Foreground"
+            Value="#475569"/>
+
+    </Style>
+
+    <!-- ======================================== -->
+    <!-- GRID ACTION BUTTON -->
+    <!-- ======================================== -->
+
+    <Style x:Key="ERPGridIconButton"
+       TargetType="Button"
+       BasedOn="{StaticResource MaterialDesignIconButton}">
+
+        <Setter Property="Width"
+            Value="34"/>
+
+        <Setter Property="Height"
+            Value="34"/>
+
+        <Setter Property="Margin"
+            Value="2"/>
+
+        <Setter Property="Padding"
+            Value="0"/>
+
+        <Setter Property="Foreground"
+            Value="{StaticResource TextBrush}"/>
+
+        <Setter Property="Background"
+            Value="Transparent"/>
+
+        <Setter Property="Cursor"
+            Value="Hand"/>
+
+        <Setter Property="BorderThickness"
+            Value="0"/>
+
+        <Setter Property="HorizontalContentAlignment"
+            Value="Center"/>
+
+        <Setter Property="VerticalContentAlignment"
+            Value="Center"/>
+
+        <Style.Triggers>
+
+            <Trigger Property="IsMouseOver"
+                 Value="True">
+                <Setter Property="Background"
+                    Value="#EEF2FF"/>
+            </Trigger>
+
+            <Trigger Property="IsPressed"
+                 Value="True">
+                <Setter Property="Background"
+                    Value="#DBEAFE"/>
+            </Trigger>
+
+        </Style.Triggers>
+
+    </Style>
+
+
+</ResourceDictionary>

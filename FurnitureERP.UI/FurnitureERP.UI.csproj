@@ -1,0 +1,53 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net10.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+  <ItemGroup>
+    
+    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.2" />
+
+    <PackageReference Include="MaterialDesignThemes" Version="5.3.2" />
+
+    <PackageReference Include="MaterialDesignColors" Version="5.3.2" />
+
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="10.0.2">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>
+        runtime; build; native; contentfiles; analyzers; buildtransitive
+      </IncludeAssets>
+    </PackageReference>
+
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="10.0.2" />
+
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="10.0.2" />
+
+    <PackageReference Include="Microsoft.Extensions.Logging" Version="10.0.2" />
+
+    <PackageReference Include="Refractored.MvvmHelpers" Version="1.6.2" />
+
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\FurnitureERP.Application\FurnitureERP.Application.csproj" />
+    <ProjectReference Include="..\FurnitureERP.Infrastructure\FurnitureERP.Infrastructure.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Modules\Sales\Views\AddSupplierView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Settings\appsettings.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+</Project>

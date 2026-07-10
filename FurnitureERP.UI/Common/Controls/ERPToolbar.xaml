@@ -1,0 +1,32 @@
+﻿<UserControl x:Class="FurnitureERP.UI.Common.Controls.ERPToolbar"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <Grid>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
+
+        <!-- LEFT -->
+        <ContentPresenter Grid.Column="0"
+                          Content="{Binding LeftContent,
+                          RelativeSource={RelativeSource AncestorType=UserControl}}"/>
+
+        <!-- CENTER (Search / Filters) -->
+        <ContentPresenter Grid.Column="1"
+                          HorizontalAlignment="Center"
+                          Content="{Binding CenterContent,
+                          RelativeSource={RelativeSource AncestorType=UserControl}}"/>
+
+        <!-- RIGHT -->
+        <ContentPresenter Grid.Column="2"
+                          HorizontalAlignment="Right"
+                          Content="{Binding RightContent,
+                          RelativeSource={RelativeSource AncestorType=UserControl}}"/>
+
+    </Grid>
+
+</UserControl>

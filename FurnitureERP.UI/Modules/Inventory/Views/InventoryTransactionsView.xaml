@@ -1,0 +1,109 @@
+﻿<UserControl
+    x:Class="FurnitureERP.UI.Modules.Inventory.Views.InventoryTransactionsView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="clr-namespace:FurnitureERP.UI.Common.Controls"
+    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes">
+
+    <controls:ERPListPage
+         Margin="16,16,16,16"
+          Width="1000"
+    Height="650"
+        Title="Inventory Transactions"
+        Subtitle="{Binding ProductName}">
+
+        <!-- Toolbar -->
+
+        <controls:ERPListPage.ToolbarContent >
+
+            <controls:ERPToolbar>
+
+                <controls:ERPToolbar.CenterContent>
+
+                    <TextBox
+                        Width="250"
+                        Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                        materialDesign:HintAssist.Hint="Search..."
+                        Text="{Binding SearchText,
+                                      UpdateSourceTrigger=PropertyChanged}" />
+
+                </controls:ERPToolbar.CenterContent>
+
+            </controls:ERPToolbar>
+
+        </controls:ERPListPage.ToolbarContent>
+
+        <!-- Grid -->
+
+        <controls:ERPListPage.Content
+            >
+
+            <materialDesign:Card   Margin="16"
+    Padding="10">
+
+                <DataGrid
+                       
+                    AutoGenerateColumns="False"
+                    ItemsSource="{Binding Items}">
+
+                    <DataGrid.Columns>
+
+                        <DataGridTextColumn
+                            Header="Date"
+                            Binding="{Binding TransactionDate}" />
+
+                        <DataGridTextColumn
+                            Header="Type"
+                            Binding="{Binding Type}" />
+
+                        <DataGridTextColumn
+    Header="Reason"
+    Width="170"
+    Binding="{Binding ReasonDisplay}" />
+
+                        <DataGridTextColumn
+                            Header="Quantity"
+                            Binding="{Binding Quantity}" />
+
+                        <DataGridTextColumn
+                            Header="Balance"
+                            Binding="{Binding BalanceAfter}" />
+
+                        <DataGridTextColumn
+                            Header="Reference"
+                            Binding="{Binding ReferenceType}" />
+
+                        <DataGridTextColumn
+                            Header="Reference Id"
+                            Binding="{Binding ReferenceId}" />
+
+                        <DataGridTextColumn
+                            Width="2*"
+                            Header="Notes"
+                            Binding="{Binding Notes}" />
+
+                    </DataGrid.Columns>
+
+                </DataGrid>
+
+            </materialDesign:Card>
+
+        </controls:ERPListPage.Content>
+
+        <!-- Pagination -->
+
+        <controls:ERPListPage.PaginationContent>
+
+            <controls:ERPPagination
+                CurrentPage="{Binding CurrentPage}"
+                TotalPages="{Binding TotalPages}"
+                PreviousCommand="{Binding PreviousPageCommand}"
+                NextCommand="{Binding NextPageCommand}"
+                FirstCommand="{Binding FirstPageCommand}"
+                LastCommand="{Binding LastPageCommand}" />
+
+        </controls:ERPListPage.PaginationContent>
+
+    </controls:ERPListPage>
+
+</UserControl>

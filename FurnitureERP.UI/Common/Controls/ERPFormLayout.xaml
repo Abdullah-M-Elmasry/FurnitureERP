@@ -1,0 +1,72 @@
+﻿<UserControl x:Class="FurnitureERP.UI.Common.Controls.ERPFormLayout"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Name="Root">
+
+    <Border Background="{StaticResource CardBrush}"
+        Padding="30"
+        CornerRadius="12"
+        BorderBrush="{StaticResource BorderBrushSoft}"
+        BorderThickness="1">
+        <Grid>
+
+            <Grid.RowDefinitions>
+
+                <RowDefinition Height="Auto"/>
+
+                <RowDefinition Height="15"/>
+
+                <RowDefinition Height="*"/>
+
+                <RowDefinition Height="20"/>
+
+                <RowDefinition Height="Auto"/>
+
+            </Grid.RowDefinitions>
+
+
+            <!-- Title -->
+
+            <StackPanel>
+
+                <TextBlock Text="{Binding Title,ElementName=Root}"
+                           FontSize="22"
+                           FontWeight="SemiBold"/>
+
+                <TextBlock Text="{Binding Subtitle,ElementName=Root}"
+                           Foreground="{StaticResource HintBrush}"/>
+
+            </StackPanel>
+
+
+            <!-- Form Content -->
+
+            <ContentPresenter Grid.Row="2"
+                              Content="{Binding FormContent,
+                              ElementName=Root}"/>
+
+
+            <!-- Buttons -->
+
+            <StackPanel Grid.Row="4"
+            HorizontalAlignment="Right"
+            Orientation="Horizontal">
+
+                <Button Content="Cancel"
+             Margin="0,0,10,0"
+             Style="{StaticResource ERPSecondaryButton}"
+             Command="{Binding CancelCommand,
+                       ElementName=Root}"/>
+
+                <Button Content="{Binding SaveButtonText,
+                      ElementName=Root}"
+             Style="{StaticResource ERPPrimaryButton}"
+             Command="{Binding SaveCommand,
+                       ElementName=Root}"/>
+
+            </StackPanel>
+        </Grid>
+
+    </Border>
+
+</UserControl>
