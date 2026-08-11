@@ -7,7 +7,7 @@ namespace FurnitureERP.Infrastructure.Persistence.Seed;
 
 public static class SecuritySeeder
 {
-    public static async Task SeedAsync(AppDbContext db, IPasswordHasher hasher)
+    public static async Task SeedAsync(AppDbContext db, IPasswordService hasher)
     {
        // Console.WriteLine("🔥 Security Seeder Running...");
 
@@ -24,16 +24,16 @@ public static class SecuritySeeder
             "Users.Delete"
         };
 
-        foreach (var name in permissionNames)
-        {
-            var exists = await db.Permissions
-                .AnyAsync(p => p.Name == name);
+        //foreach (var name in permissionNames)
+        //{
+        //    var exists = await db.Permissions
+        //        .AnyAsync(p => p.Name == name);
 
-            if (!exists)
-            {
-                await db.Permissions.AddAsync(new Permission(name));
-            }
-        }
+        //    if (!exists)
+        //    {
+        //        await db.Permissions.AddAsync(new Permission(name));
+        //    }
+        //}
 
         await db.SaveChangesAsync();
 
@@ -45,7 +45,7 @@ public static class SecuritySeeder
 
         if (adminRole == null)
         {
-            adminRole = new Role("Admin");
+            //adminRole = new Role("Admin");
             await db.Roles.AddAsync(adminRole);
             await db.SaveChangesAsync();
         }
@@ -56,17 +56,17 @@ public static class SecuritySeeder
         var adminUser = await db.Users
             .FirstOrDefaultAsync(u => u.Username == "admin");
 
-        if (adminUser == null)
-        {
-            adminUser = new User(
-                "admin",
-                hasher.Hash("123456"),
-                "System Admin"
-            );
+        //if (adminUser == null)
+        //{
+        //    adminUser = new User(
+        //        "admin",
+        //        hasher.Hash("123456"),
+        //        "System Admin"
+        //    );
 
-            await db.Users.AddAsync(adminUser);
-            await db.SaveChangesAsync();
-        }
+        //    await db.Users.AddAsync(adminUser);
+        //    await db.SaveChangesAsync();
+        //}
 
         // =========================
         // UserRole
@@ -77,7 +77,7 @@ public static class SecuritySeeder
 
         if (!userRoleExists)
         {
-            db.UserRoles.Add(new UserRole(adminUser.Id, adminRole.Id));
+            // db.UserRoles.Add(new UserRole(adminUser.Id, adminRole.Id));
             await db.SaveChangesAsync();
         }
 
@@ -94,8 +94,8 @@ public static class SecuritySeeder
 
             if (!rolePermissionExists)
             {
-                db.RolePermissions.Add(
-                    new RolePermission(adminRole.Id, permission.Id));
+               // db.RolePermissions.Add(
+            //        new RolePermission(adminRole.Id, permission.Id));
             }
         }
 

@@ -1,8 +1,10 @@
-﻿using FurnitureERP.Domain.Entities.Security;
+﻿using FurnitureERP.Application.Security.DTOs;
+using FurnitureERP.Domain.Entities.Security;
 
 namespace FurnitureERP.Application.Security.Interfaces;
 
 public interface IAuthService
 {
-    Task<User?> LoginAsync(string username, string password);
+    Task<UserDto> Register(RegisterRequestdDTO request);
+    Task<LoginResponseDto> Login(LoginRequestDto request);
 }

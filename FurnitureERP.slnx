@@ -1,4 +1,5 @@
 <Solution>
+  <Project Path="FurnitureERP.API/FurnitureERP.API.csproj" Id="ee647879-0a85-4057-b025-465361100568" />
   <Project Path="FurnitureERP.Application/FurnitureERP.Application.csproj" />
   <Project Path="FurnitureERP.Domain/FurnitureERP.Domain.csproj" />
   <Project Path="FurnitureERP.Infrastructure/FurnitureERP.Infrastructure.csproj" />

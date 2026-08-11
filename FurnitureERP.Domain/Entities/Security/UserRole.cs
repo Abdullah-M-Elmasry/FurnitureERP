@@ -2,18 +2,11 @@
 
 public class UserRole
 {
-    public int UserId { get; private set; }
-    public int RoleId { get; private set; }
+    public int UserId { get; set; }
 
-    // 🔥 دول المهمين
-    public User User { get; private set; } = null!;
-    public Role Role { get; private set; } = null!;
+    public User User { get; set; } = null!;
 
-    private UserRole() { }
+    public int RoleId { get; set; }
 
-    public UserRole(int userId, int roleId)
-    {
-        UserId = userId;
-        RoleId = roleId;
-    }
+    public Role Role { get; set; } = null!;
 }

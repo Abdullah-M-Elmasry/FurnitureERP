@@ -17,6 +17,9 @@ public class PermissionConfiguration : IEntityTypeConfiguration<Permission>
         builder.HasIndex(x => x.Name)
             .IsUnique();
 
+        builder.Property(x => x.Description)
+            .HasMaxLength(250);
+
         builder.HasMany(x => x.RolePermissions)
             .WithOne(x => x.Permission)
             .HasForeignKey(x => x.PermissionId);

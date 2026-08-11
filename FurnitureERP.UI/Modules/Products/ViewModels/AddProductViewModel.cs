@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using FurnitureERP.Application.Common.Interfaces;
+using FurnitureERP.Application.Products.DTOs;
 using FurnitureERP.Application.Products.Interfaces;
 using FurnitureERP.Domain.Entities.Products;
 using FurnitureERP.UI.Common.Crud;
@@ -338,21 +339,25 @@ public partial class AddProductViewModel
 
         if (IsEditMode)
         {
-            Entity!.Code = Code!;
-            Entity.Barcode = Barcode;
-            Entity.Name = Name!;
-            Entity.CostPrice = CostPrice;
-            Entity.SalePrice = SalePrice;
-            Entity.CategoryId = SelectedCategory!.Id;
-            Entity.UnitId = SelectedUnit!.Id;
+            var request = new UpdateProductRequest
+            {
+                Id = Entity!.Id,
+                Code = Code!,
+                BarCode = Barcode,
+                Name = Name!,
+                CostPrice = CostPrice,
+                SalePrice = SalePrice,
+                CategoryId = SelectedCategory!.Id,
+                UnitId = SelectedUnit!.Id
+            };
 
-            await _productService.Update(Entity);
+            var result = await _productService.Update(request);
 
-            DialogResult = Entity;
+           // DialogResult = Entity;
         }
         else
         {
-            var product = new Product
+            var request = new CreateProductRequest
             {
                 Code = Code!,
                 Barcode = Barcode,
@@ -360,13 +365,12 @@ public partial class AddProductViewModel
                 CostPrice = CostPrice,
                 SalePrice = SalePrice,
                 CategoryId = SelectedCategory!.Id,
-                UnitId = SelectedUnit!.Id,
-                IsActive = true
+                UnitId = SelectedUnit!.Id
             };
 
-            await _productService.Add(product);
+            var result = await _productService.Add(request);
 
-            DialogResult = product;
+            //DialogResult = request;
         }
     }
 

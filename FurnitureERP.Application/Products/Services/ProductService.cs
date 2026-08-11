@@ -1,89 +1,136 @@
-﻿using FurnitureERP.Application.Common.Models;
+﻿using FurnitureERP.Application.Common.Interfaces;
+using FurnitureERP.Application.Common.Models;
+using FurnitureERP.Application.Products.DTOs;
+using FurnitureERP.Application.Products.DTOs.Responses;
 using FurnitureERP.Application.Products.Interfaces;
 using FurnitureERP.Domain.Entities.Products;
+using System.ComponentModel.DataAnnotations;
+using FurnitureERP.Application.Common.Exceptions;
 
 namespace FurnitureERP.Application.Products.Services;
 
 public class ProductService : IProductService
 {
     private readonly IProductRepository _repo;
-
-    public ProductService(IProductRepository repo)
+    private readonly IUnitOfWork _unitOfWork;
+    public ProductService(IProductRepository repo, IUnitOfWork unitOfWork)
     {
         _repo = repo;
+        _unitOfWork = unitOfWork;
     }
 
-    public async Task<Product> Add(Product product)
+    public async Task<ProductDto> Add(CreateProductRequest request)
     {
-        Validate(product);
+        
 
-        if (await _repo.CodeExists(product.Code))
-            throw new Exception("Product Code already exists");
+          var product = new Product
+        {
+            Name = request.Name,
+            Code= request.Code,
+            Barcode= request.Barcode,
+            CostPrice = request.CostPrice,
+            SalePrice = request.SalePrice,
+            CategoryId = request.CategoryId,
+            UnitId = request.UnitId,
+            IsActive = true,
+            CreatedAt = DateTime.UtcNow
+        };
 
-        if (!string.IsNullOrWhiteSpace(product.Barcode) &&
-            await _repo.BarcodeExists(product.Barcode))
-            throw new Exception("Barcode already exists");
+        product.Code = await _repo.GenerateNextCode();
+
+        product.Barcode = await _repo.GenerateNextBarcode();
+
+        await Validate(product);
+
+        //if (await _repo.CodeExists(product.Code))
+        //    throw new ValidationExceptionApp("Product Code already exists");
+
+        //if (!string.IsNullOrWhiteSpace(product.Barcode) &&
+        //    await _repo.BarcodeExists(product.Barcode))
+        //    throw new ValidationExceptionApp("Barcode al,ready exists");
 
         await _repo.Add(product);
 
-      //  await _repo.SaveChanges();
+        await _unitOfWork.SaveChangesAsync();
 
-        return product;
+        return new ProductDto
+        {
+            Id = product.Id,
+            Code = product.Code,
+            Name = product.Name,
+            SalePrice = product.SalePrice
+        };
     }
 
-    public async Task Update(Product product)
+    public async Task<ProductDto> Update(UpdateProductRequest request)
     {
-        Validate(product);
+        var product = await _repo.GetById(request.Id);
 
-        var existing = await _repo.GetById(product.Id)
-            ?? throw new Exception("Product not found");
+        if (product == null)
+            throw new NotFoundExceptionApp("Product not found");
 
-        if (await _repo.CodeExists(product.Code, product.Id))
-            throw new Exception("Duplicate Code");
+        product.Code = request.Code;
+        product.Barcode = request.BarCode;
+        product.Name = request.Name;
+        product.CostPrice = request.CostPrice;
+        product.SalePrice = request.SalePrice;
+        product.CategoryId = request.CategoryId;
+        product.UnitId = request.UnitId;
 
-        if (!string.IsNullOrWhiteSpace(product.Barcode) &&
-            await _repo.BarcodeExists(product.Barcode, product.Id))
-            throw new Exception("Duplicate Barcode");
+        await Validate(product);
 
-        existing.Code = product.Code;
-        existing.Barcode = product.Barcode;
-        existing.Name = product.Name;
-        existing.CostPrice = product.CostPrice;
-        existing.SalePrice = product.SalePrice;
-        existing.CategoryId = product.CategoryId;
-        existing.UnitId = product.UnitId;
+        await _repo.Update(product);
 
-        await _repo.Update(existing);
+        await _unitOfWork.SaveChangesAsync();
 
-        //await _repo.SaveChanges();
+        return new ProductDto
+        {
+            Id = product.Id,
+            Code = product.Code,
+            Name = product.Name,
+            SalePrice = product.SalePrice,
+            CategoryName = product.Category?.Name ?? "",
+            UnitName = product.Unit?.Name ?? ""
+        };
     }
-
     public async Task Delete(int id)
     {
         var product = await _repo.GetById(id)
-            ?? throw new Exception("Product not found");
+            ?? throw new NotFoundExceptionApp("Product not found");
 
         await _repo.Delete(product);
 
-      //  await _repo.SaveChanges();
+        await _unitOfWork.SaveChangesAsync();
+        //  await _repo.SaveChanges();
     }
 
-   
+
     //public Task<List<ProductCategory>> GetCategories()
     //    => _repo.GetCategories();
 
     //public Task<List<Unit>> GetUnits()
     //    => _repo.GetUnits();
 
-    private void Validate(Product product)
+    private async Task Validate(Product product)
     {
-        if (string.IsNullOrWhiteSpace(product.Code))
-            throw new Exception("Code is required");
+        if (await _repo.CodeExists(product.Code, product.Id))
+            throw new ConflictExceptionApp("Product Code already exists");
+
+        if (!string.IsNullOrWhiteSpace(product.Barcode))
+        {
+            if (await _repo.BarcodeExists(product.Barcode, product.Id))
+                throw new ConflictExceptionApp("Barcode already exists");
+        }
 
         if (string.IsNullOrWhiteSpace(product.Name))
-            throw new Exception("Name is required");
-    }
+            throw new ValidationExceptionApp("Name is required");
 
+        if (product.CostPrice < 0)
+            throw new ValidationExceptionApp("Cost Price cannot be negative");
+
+        if (product.SalePrice < 0)
+            throw new ValidationExceptionApp("Sale Price cannot be negative");
+    }
 
     public async Task<List<Product>> GetLookup()
     {
@@ -91,12 +138,49 @@ public class ProductService : IProductService
     }
 
 
-    public Task<PagedResult<Product>> GetAll(
+    public async Task<ProductDetailsDto?> GetById(int id)
+    {
+
+        var product = await _repo.GetById(id);
+
+        if (product == null)
+            throw new NotFoundExceptionApp("Product not found");
+
+        return new ProductDetailsDto
+        {
+            Id = product.Id,
+            Code = product.Code,
+            BarCode = product.Barcode,
+            Name = product.Name,
+            CostPrice = product.CostPrice,
+            SalePrice = product.SalePrice,
+            CategoryId = product.CategoryId,
+            CategoryName = product.Category?.Name ?? "",
+            UnitId = product.UnitId,
+            UnitName = product.Unit?.Name ?? ""
+        };
+    }
+
+    public async Task<PagedResult<ProductDto>> GetAll(
       string search,
       int page,
       int pageSize)
     {
-        return _repo.GetAll(search, page, pageSize);
+        var result = await _repo.GetAll(search, page, pageSize);
+
+        return new PagedResult<ProductDto>
+        {
+            TotalCount = result.TotalCount,
+            Items = result.Items.Select(p => new ProductDto
+            {
+                Id = p.Id,
+                Code = p.Code,
+                Name = p.Name,
+                SalePrice = p.SalePrice,
+                CategoryName = p.Category?.Name ?? "",
+                UnitName = p.Unit?.Name ?? ""
+            }).ToList()
+        };
     }
 
 
@@ -194,6 +278,4 @@ public class ProductService : IProductService
 
     public Task<string> GenerateNextBarcode()
         => _repo.GenerateNextBarcode();
-
-
 }

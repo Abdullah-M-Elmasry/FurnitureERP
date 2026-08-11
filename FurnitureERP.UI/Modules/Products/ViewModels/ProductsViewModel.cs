@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.Input;
 using FurnitureERP.Application.Common.Interfaces;
+using FurnitureERP.Application.Products.DTOs.Responses;
 using FurnitureERP.Application.Products.Interfaces;
 using FurnitureERP.Domain.Entities.Products;
 using FurnitureERP.UI.Common.ViewModels;
@@ -7,7 +8,7 @@ using FurnitureERP.UI.Common.ViewModels;
 namespace FurnitureERP.UI.Modules.Products.ViewModels;
 
 public partial class ProductsViewModel
-    : CrudListViewModel<Product>
+    : CrudListViewModel<ProductDto>
 {
     private readonly IProductService _productService;
     private readonly INotificationService _notificationService;
@@ -101,7 +102,7 @@ public partial class ProductsViewModel
     // =========================
 
     [RelayCommand]
-    private async Task DeleteProduct(Product product)
+    private async Task DeleteProduct(ProductDto product)
     {
         if (product == null)
             return;

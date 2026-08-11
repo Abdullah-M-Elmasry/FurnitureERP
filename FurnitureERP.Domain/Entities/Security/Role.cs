@@ -2,16 +2,15 @@
 
 public class Role
 {
-    public int Id { get; private set; }
-    public string Name { get; private set; } = null!;
+    public int Id { get; set; }
 
-    public ICollection<UserRole> UserRoles { get; private set; } = new List<UserRole>();
-    public ICollection<RolePermission> RolePermissions { get; private set; } = new List<RolePermission>();
+    public string Name { get; set; } = string.Empty;
 
-    private Role() { }
+    public string? Description { get; set; }
 
-    public Role(string name)
-    {
-        Name = name;
-    }
+    public ICollection<UserRole> UserRoles { get; set; }
+        = new List<UserRole>();
+
+    public ICollection<RolePermission> RolePermissions { get; set; }
+        = new List<RolePermission>();
 }

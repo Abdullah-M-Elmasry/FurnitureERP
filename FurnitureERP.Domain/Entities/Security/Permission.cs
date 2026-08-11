@@ -2,15 +2,12 @@
 
 public class Permission
 {
-    public int Id { get; private set; }
-    public string Name { get; private set; } = null!;
+    public int Id { get; set; }
 
-    public ICollection<RolePermission> RolePermissions { get; private set; }
-       = new List<RolePermission>();
-    private Permission() { }
+    public string Name { get; set; } = string.Empty;
 
-    public Permission(string name)
-    {
-        Name = name;
-    }
+    public string? Description { get; set; }
+
+    public ICollection<RolePermission> RolePermissions { get; set; }
+        = new List<RolePermission>();
 }

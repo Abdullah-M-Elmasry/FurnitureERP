@@ -6,17 +6,15 @@ using FurnitureERP.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 
 namespace FurnitureERP.Infrastructure.Products.Repositories;
- public class UnitRepository
-    : RepositoryBase, IUnitRepository
+ public class UnitRepository: IUnitRepository
 {
   
+    private readonly AppDbContext _db;
 
-    public UnitRepository(
-    IDbContextFactory<AppDbContext> factory)
-    : base(factory)
+    public UnitRepository(AppDbContext db)
     {
+        _db = db;
     }
-
     // =====================================================
     // GET PAGED
     // =====================================================
@@ -26,9 +24,8 @@ namespace FurnitureERP.Infrastructure.Products.Repositories;
         int page,
         int pageSize)
     {
-        await using var db = await CreateDbContextAsync();
 
-        var query = db.Units
+        var query = _db.Units
             .AsNoTracking()
             .Where(x => x.IsActive);
 
@@ -62,9 +59,7 @@ namespace FurnitureERP.Infrastructure.Products.Repositories;
 
     public async Task<Unit?> GetById(int id)
     {
-        await using var db = await CreateDbContextAsync();
-
-        return await db.Units
+        return await _db.Units
             .FirstOrDefaultAsync(x => x.Id == id);
     }
 
@@ -74,9 +69,7 @@ namespace FurnitureERP.Infrastructure.Products.Repositories;
 
     public async Task<List<Unit>> GetLookup()
     {
-        await using var db = await CreateDbContextAsync();
-
-        return await db.Units
+        return await _db.Units
             .AsNoTracking()
             .Where(x => x.IsActive)
             .OrderBy(x => x.Name)
@@ -91,9 +84,7 @@ namespace FurnitureERP.Infrastructure.Products.Repositories;
         string code,
         int? ignoreId = null)
     {
-        await using var db = await CreateDbContextAsync();
-
-        return await db.Units.AnyAsync(x =>
+        return await _db.Units.AnyAsync(x =>
             x.Code == code &&
             (!ignoreId.HasValue || x.Id != ignoreId));
     }
@@ -102,11 +93,10 @@ namespace FurnitureERP.Infrastructure.Products.Repositories;
         string name,
         int? ignoreId = null)
     {
-        await using var db = await CreateDbContextAsync();
 
         name = name.Trim().ToLower();
 
-        return await db.Units.AnyAsync(x =>
+        return await _db.Units.AnyAsync(x =>
             x.Name.ToLower() == name &&
             (!ignoreId.HasValue || x.Id != ignoreId));
     }
@@ -117,9 +107,7 @@ namespace FurnitureERP.Infrastructure.Products.Repositories;
 
     public async Task<string> GenerateNextCode()
     {
-        await using var db = await CreateDbContextAsync();
-
-        var codes = await db.Units
+        var codes = await _db.Units
             .Select(x => x.Code)
             .ToListAsync();
 
@@ -138,35 +126,31 @@ namespace FurnitureERP.Infrastructure.Products.Repositories;
 
     public async Task Add(Unit unit)
     {
-        await using var db = await CreateDbContextAsync();
 
-        await db.Units.AddAsync(unit);
-
-        await db.SaveChangesAsync();    
+        await _db.Units.AddAsync(unit);
+ 
     }
 
     public async Task Update(Unit unit)
     {
-        await using var db = await CreateDbContextAsync();
 
-        var existing = await db.Units
+        var existing = await _db.Units
             .FirstOrDefaultAsync(x => x.Id == unit.Id);
 
         if (existing == null)
             return;
 
-        db.Entry(existing)
+        _db.Entry(existing)
             .CurrentValues
             .SetValues(unit);
-        await db.SaveChangesAsync();
 
 
     }
 
     public async Task Delete(Unit unit)
     {
-        await using var db = await CreateDbContextAsync();
-        var existing = await db.Units
+    
+        var existing = await _db.Units
             .FirstOrDefaultAsync(x => x.Id == unit.Id);
 
         if (existing == null)
@@ -174,7 +158,6 @@ namespace FurnitureERP.Infrastructure.Products.Repositories;
 
         existing.IsActive = false;
 
-        await db.SaveChangesAsync();
     }
 
     

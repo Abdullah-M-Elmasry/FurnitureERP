@@ -70,31 +70,31 @@ public class LoginViewModel : INotifyPropertyChanged
 
         Status = "Checking...";
 
-        var user = await _authService.LoginAsync(Username, Password);
+        //var user = await _authService.LoginAsync(Username, Password);
 
-        if (user is not null)
-        {
-            LoggedInUser = user;
-            Status = $"Welcome {user.FullName} ✅";
+        //if (user is not null)
+        //{
+        //    LoggedInUser = user;
+        //    Status = $"Welcome {user.FullName} ✅";
 
 
 
-            //var main = _serviceProvider.GetRequiredService<MainWindow>();
-            //main.Show();
-            using var scope = _serviceProvider.CreateScope();
-            var main = scope.ServiceProvider.GetRequiredService<MainWindow>();
-            main.Show();
+        //    //var main = _serviceProvider.GetRequiredService<MainWindow>();
+        //    //main.Show();
+        //    using var scope = _serviceProvider.CreateScope();
+        //    var main = scope.ServiceProvider.GetRequiredService<MainWindow>();
+        //    main.Show();
 
-            System.Windows.Application.Current.Windows
-                .OfType<Window>()
-                .First(w => w is LoginView)
-                .Close();
+        //    System.Windows.Application.Current.Windows
+        //        .OfType<Window>()
+        //        .First(w => w is LoginView)
+        //        .Close();
 
-        }
-        else
-        {
-            Status = "Wrong username or password ❌";
-        }
+        //}
+        //else
+        //{
+        //    Status = "Wrong username or password ❌";
+        //}
     }
 
     public event PropertyChangedEventHandler? PropertyChanged;

@@ -13,7 +13,6 @@ using FurnitureERP.Application.Security.Services;
 using FurnitureERP.Application.Suppliers.Interfaces;
 using FurnitureERP.Application.Suppliers.Services;
 using FurnitureERP.Infrastructure.Documents.Pdf;
-using FurnitureERP.Infrastructure.Identity.Services;
 using FurnitureERP.Infrastructure.Inventory.Repositories;
 using FurnitureERP.Infrastructure.Inventory.Services;
 using FurnitureERP.Infrastructure.Persistence;
@@ -23,7 +22,6 @@ using FurnitureERP.Infrastructure.Products.Repositories;
 using FurnitureERP.Infrastructure.Purchases.Repositories;
 using FurnitureERP.Infrastructure.Repositories;
 using FurnitureERP.Infrastructure.Sales.Repositories;
-using FurnitureERP.Infrastructure.Security.Repositories;
 using FurnitureERP.Infrastructure.Services;
 using FurnitureERP.Infrastructure.Suppliers.Repositories;
 using FurnitureERP.UI.Modules.Customers;
@@ -52,6 +50,7 @@ using FurnitureERP.UI.Services.Interfaces;
 using FurnitureERP.UI.Shell.ViewModels;
 using FurnitureERP.UI.Shell.Views;
 using MaterialDesignThemes.Wpf;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -90,10 +89,9 @@ public partial class App :System.Windows.Application
                 // =========================
                 // Infrastructure
                 // =========================
-                services.AddScoped<IAuthRepository, AuthRepository>();
-                services.AddScoped<IPasswordHasher, PasswordHasher>();
+           
                 services.AddSingleton<ICurrentUserService, CurrentUserService>();
-                services.AddScoped<IPermissionChecker, PermissionChecker>();
+            
 
                 services.AddScoped<IPdfDocumentService, PdfDocumentService>();
                 // =========================
@@ -243,8 +241,8 @@ public partial class App :System.Windows.Application
         var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
 
 
-        var hasher = scope.ServiceProvider.GetRequiredService<IPasswordHasher>();
-        await SecuritySeeder.SeedAsync(db, hasher);
+      //  var hasher = scope.ServiceProvider.GetRequiredService<IPasswordHasher>();
+       // await SecuritySeeder.SeedAsync(db, hasher);
 
         // 🔹 هنا بنفتح شاشة اللوجين
         //var login = scope.ServiceProvider.GetRequiredService<LoginView>();

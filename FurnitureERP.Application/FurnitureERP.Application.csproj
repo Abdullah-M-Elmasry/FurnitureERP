@@ -18,6 +18,7 @@
   <ItemGroup>
     <Folder Include="Customers\DTOs\" />
     <Folder Include="Suppliers\DTOs\" />
+    <Folder Include="Users\DTOs\" />
   </ItemGroup>
 
 </Project>

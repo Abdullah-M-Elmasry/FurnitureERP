@@ -1,4 +1,5 @@
-﻿using FurnitureERP.Application.Common.Models;
+﻿using FurnitureERP.Application.Common.Interfaces;
+using FurnitureERP.Application.Common.Models;
 using FurnitureERP.Application.Products.Interfaces;
 using FurnitureERP.Domain.Entities.Products;
 
@@ -7,10 +8,11 @@ namespace FurnitureERP.Application.Products.Services;
 public class CategoryService : ICategoryService
 {
     private readonly ICategoryRepository _repository;
-
-    public CategoryService(ICategoryRepository repository)
+    private readonly IUnitOfWork _unitOfWork;
+    public CategoryService(ICategoryRepository repository ,IUnitOfWork unitOfWork)
     {
         _repository = repository;
+        _unitOfWork = unitOfWork;
     }
 
     // =====================================================
@@ -69,6 +71,7 @@ public class CategoryService : ICategoryService
     {
         await _repository.Add(category);
 
+        await _unitOfWork.SaveChangesAsync();
         //await _repository.SaveChanges();
 
         return category;
@@ -82,7 +85,8 @@ public class CategoryService : ICategoryService
     {
         await _repository.Update(category);
 
-      //  await _repository.SaveChanges();
+        await _unitOfWork.SaveChangesAsync();
+        //  await _repository.SaveChanges();
     }
 
     // =====================================================
@@ -98,6 +102,8 @@ public class CategoryService : ICategoryService
 
         await _repository.Delete(category);
 
-       // await _repository.SaveChanges();
+        await _unitOfWork.SaveChangesAsync();
+
+        // await _repository.SaveChanges();
     }
 }

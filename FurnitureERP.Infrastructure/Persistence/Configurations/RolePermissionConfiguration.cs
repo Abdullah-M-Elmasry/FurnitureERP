@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using FurnitureERP.Domain.Entities.Security;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 public class RolePermissionConfiguration : IEntityTypeConfiguration<RolePermission>

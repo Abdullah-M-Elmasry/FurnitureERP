@@ -8,12 +8,13 @@ using Microsoft.EntityFrameworkCore;
 
 namespace FurnitureERP.Infrastructure.Products.Repositories;
 
-public class ProductRepository :RepositoryBase, IProductRepository
+public class ProductRepository : IProductRepository
 {
-    public ProductRepository(
-   IDbContextFactory<AppDbContext> factory)
-   : base(factory)
+    private readonly AppDbContext _db;
+
+    public ProductRepository(AppDbContext db)
     {
+        _db = db;
     }
 
     // =====================================================
@@ -25,9 +26,9 @@ public class ProductRepository :RepositoryBase, IProductRepository
      int page,
      int pageSize)
     {
-        await using var db = await CreateDbContextAsync();
+      
 
-        var query = db.Products
+        var query = _db.Products
             .AsNoTracking()
             .Include(x => x.Category)
             .Include(x => x.Unit)
@@ -59,28 +60,26 @@ public class ProductRepository :RepositoryBase, IProductRepository
         };
     }
 
-   
+
     // =====================================================
     // GET PRODUCT BY ID
     // =====================================================
 
     public async Task<Product?> GetById(int id)
     {
-        await using var db = await CreateDbContextAsync();
-
-        return await db.Products
-            .FirstOrDefaultAsync(p => p.Id == id);
+        return await _db.Products
+            .AsNoTracking()
+            .Include(x => x.Category)
+            .Include(x => x.Unit)
+            .FirstOrDefaultAsync(x => x.Id == id);
     }
-
     // =====================================================
     // GET ALL ACTIVE PRODUCTS
     // =====================================================
 
     public async Task<List<Product>> GetLookup()
     {
-        await using var db = await CreateDbContextAsync();
-
-        return await db.Products
+        return await _db.Products
             .AsNoTracking()
             .Where(x => x.IsActive)
             .OrderBy(x => x.Name)
@@ -95,9 +94,7 @@ public class ProductRepository :RepositoryBase, IProductRepository
         string code,
         int? ignoreId = null)
     {
-        await using var db = await CreateDbContextAsync();
-
-        return await db.Products.AnyAsync(p =>
+        return await _db.Products.AnyAsync(p =>
             p.Code == code &&
             (!ignoreId.HasValue ||
              p.Id != ignoreId));
@@ -111,9 +108,7 @@ public class ProductRepository :RepositoryBase, IProductRepository
         string barcode,
         int? ignoreId = null)
     {
-        await using var db = await CreateDbContextAsync();
-
-        return await db.Products.AnyAsync(p =>
+        return await _db.Products.AnyAsync(p =>
             p.Barcode == barcode &&
             (!ignoreId.HasValue ||
              p.Id != ignoreId));
@@ -124,11 +119,9 @@ public class ProductRepository :RepositoryBase, IProductRepository
     string name,
     int? ignoreId = null)
     {
-        await using var db = await CreateDbContextAsync();
-
         name = name.Trim().ToLower();
 
-        return await db.Products.AnyAsync(x =>
+        return await _db.Products.AnyAsync(x =>
             x.Name.ToLower() == name &&
             (!ignoreId.HasValue || x.Id != ignoreId));
     }
@@ -136,9 +129,9 @@ public class ProductRepository :RepositoryBase, IProductRepository
 
     public async Task<string> GenerateNextCode()
     {
-        await using var db = await CreateDbContextAsync();
+        
 
-        var codes = await db.Products
+        var codes = await _db.Products
             .Select(x => x.Code)
             .ToListAsync();
 
@@ -153,9 +146,9 @@ public class ProductRepository :RepositoryBase, IProductRepository
 
     public async Task<string> GenerateNextBarcode()
     {
-        await using var db = await CreateDbContextAsync();
+       
 
-        var last = await db.Products
+        var last = await _db.Products
             .OrderByDescending(x => x.Id)
             .Select(x => x.Barcode)
             .FirstOrDefaultAsync();
@@ -172,11 +165,10 @@ public class ProductRepository :RepositoryBase, IProductRepository
 
     public async Task Add(Product product)
     {
-        await using var db = await CreateDbContextAsync();
+       
 
-        await db.Products.AddAsync(product);
+        await _db.Products.AddAsync(product);
 
-        await db.SaveChangesAsync();
     }
 
     // =====================================================
@@ -185,19 +177,17 @@ public class ProductRepository :RepositoryBase, IProductRepository
 
     public async Task Update(Product product)
     {
-        await using var db = await CreateDbContextAsync();
 
-        var existing = await db.Products
+        var existing = await _db.Products
             .FirstOrDefaultAsync(x => x.Id == product.Id);
 
         if (existing == null)
             return;
 
-        db.Entry(existing)
+        _db.Entry(existing)
            .CurrentValues
            .SetValues(product);
 
-        await db.SaveChangesAsync();
     }
 
     // =====================================================
@@ -206,9 +196,8 @@ public class ProductRepository :RepositoryBase, IProductRepository
 
     public async Task Delete(Product product)
     {
-        await using var db = await CreateDbContextAsync();
 
-        var existing = await db.Products
+        var existing = await _db.Products
             .FirstOrDefaultAsync(x => x.Id == product.Id);
 
         if (existing == null)
@@ -216,7 +205,6 @@ public class ProductRepository :RepositoryBase, IProductRepository
 
         existing.IsActive = false;
 
-        await db.SaveChangesAsync();
     }
 
 

@@ -7,12 +7,14 @@ using Microsoft.EntityFrameworkCore;
 
 namespace FurnitureERP.Infrastructure.Products.Repositories;
 
-public class CategoryRepository :RepositoryBase ,ICategoryRepository
+public class CategoryRepository : ICategoryRepository
 {
-    public CategoryRepository(
-   IDbContextFactory<AppDbContext> factory)
-   : base(factory)
+    
+    private readonly AppDbContext _db;
+
+    public CategoryRepository(AppDbContext db)
     {
+        _db = db;
     }
 
     // =====================================================
@@ -24,9 +26,8 @@ public class CategoryRepository :RepositoryBase ,ICategoryRepository
         int page,
         int pageSize)
     {
-        await using var db = await CreateDbContextAsync();
 
-        var query = db.ProductCategories
+        var query = _db.ProductCategories
             .AsNoTracking()
             .Where(x => x.IsActive);
 
@@ -60,9 +61,8 @@ public class CategoryRepository :RepositoryBase ,ICategoryRepository
 
     public async Task<List<ProductCategory>> GetLookup()
     {
-        await using var db = await CreateDbContextAsync();
 
-        return await db.ProductCategories
+        return await _db.ProductCategories
             .AsNoTracking()
             .Where(x => x.IsActive)
             .OrderBy(x => x.Name)
@@ -75,9 +75,7 @@ public class CategoryRepository :RepositoryBase ,ICategoryRepository
 
     public async Task<ProductCategory?> GetById(int id)
     {
-        await using var db = await CreateDbContextAsync();
-
-        return await db.ProductCategories
+        return await _db.ProductCategories
             .FirstOrDefaultAsync(x => x.Id == id);
     }
 
@@ -91,9 +89,7 @@ public class CategoryRepository :RepositoryBase ,ICategoryRepository
         string code,
         int? ignoreId = null)
     {
-        await using var db = await CreateDbContextAsync();
-
-        return await db.ProductCategories.AnyAsync(x =>
+        return await _db.ProductCategories.AnyAsync(x =>
             x.Code == code &&
             (!ignoreId.HasValue || x.Id != ignoreId));
     }
@@ -102,11 +98,10 @@ public class CategoryRepository :RepositoryBase ,ICategoryRepository
         string name,
         int? ignoreId = null)
     {
-        await using var db = await CreateDbContextAsync();
 
         name = name.Trim().ToLower();
 
-        return await db.ProductCategories.AnyAsync(x =>
+        return await _db.ProductCategories.AnyAsync(x =>
             x.Name.ToLower() == name  &&
             (!ignoreId.HasValue || x.Id != ignoreId));
     }
@@ -117,9 +112,8 @@ public class CategoryRepository :RepositoryBase ,ICategoryRepository
 
     public async Task<string> GenerateNextCode()
     {
-        await using var db = await CreateDbContextAsync();
 
-        var codes = await db.ProductCategories
+        var codes = await _db.ProductCategories
             .Select(x => x.Code)
             .ToListAsync();
 
@@ -143,43 +137,35 @@ public class CategoryRepository :RepositoryBase ,ICategoryRepository
 
     public async Task Add(ProductCategory category)
     {
-        await using var db = await CreateDbContextAsync();
 
-        await db.ProductCategories.AddAsync(category);
-
-        await db.SaveChangesAsync();
+        await _db.ProductCategories.AddAsync(category);
 
     }
 
     public async Task Update(ProductCategory category)
     {
-        await using var db = await CreateDbContextAsync();
-        var existing = await db.ProductCategories
+        var existing = await _db.ProductCategories
             .FirstOrDefaultAsync(x => x.Id == category.Id);
 
         if (existing == null)
             return;
 
-        db.Entry(existing)
+        _db.Entry(existing)
             .CurrentValues
             .SetValues(category);
 
-        await db.SaveChangesAsync();
     }
 
     public async Task Delete(ProductCategory category)
     {
-        await using var db = await CreateDbContextAsync();
 
-        var existing = await db.ProductCategories
+        var existing = await _db.ProductCategories
             .FirstOrDefaultAsync(x => x.Id == category.Id);
 
         if (existing == null)
             return;
 
         existing.IsActive = false;
-
-        await db.SaveChangesAsync();
     }
 
     //public async Task SaveChanges()

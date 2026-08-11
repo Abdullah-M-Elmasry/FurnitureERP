@@ -1,4 +1,5 @@
-﻿using FurnitureERP.Application.Common.Models;
+﻿using FurnitureERP.Application.Common.Interfaces;
+using FurnitureERP.Application.Common.Models;
 using FurnitureERP.Application.Products.Interfaces;
 using FurnitureERP.Domain.Entities.Products;
 
@@ -7,10 +8,12 @@ namespace FurnitureERP.Application.Products.Services;
 public class UnitService : IUnitService
 {
     private readonly IUnitRepository _repository;
+    private readonly IUnitOfWork _unitOfWork;
 
-    public UnitService(IUnitRepository repository)
+    public UnitService(IUnitRepository repository ,IUnitOfWork unitOfWork)
     {
         _repository = repository;
+        _unitOfWork = unitOfWork;
     }
 
     public Task<PagedResult<Unit>> GetAll(
@@ -38,7 +41,9 @@ public class UnitService : IUnitService
     public async Task<Unit> Add(Unit unit)
     {
         await _repository.Add(unit);
-       // await _repository.SaveChanges();
+
+        await _unitOfWork.SaveChangesAsync();
+        // await _repository.SaveChanges();
 
         return unit;
     }
@@ -46,6 +51,8 @@ public class UnitService : IUnitService
     public async Task Update(Unit unit)
     {
         await _repository.Update(unit);
+
+        await _unitOfWork.SaveChangesAsync();
         //await _repository.SaveChanges();
     }
 
@@ -57,6 +64,8 @@ public class UnitService : IUnitService
             return;
 
         await _repository.Delete(unit);
-       // await _repository.SaveChanges();
+
+        await _unitOfWork.SaveChangesAsync();
+        // await _repository.SaveChanges();
     }
 }

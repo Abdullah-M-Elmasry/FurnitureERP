@@ -1,18 +1,12 @@
-﻿using FurnitureERP.Domain.Entities.Security;
+﻿namespace FurnitureERP.Domain.Entities.Security;
 
 public class RolePermission
 {
-    public int RoleId { get; private set; }
-    public int PermissionId { get; private set; }
+    public int RoleId { get; set; }
 
-    public Role Role { get; private set; } = null!;
-    public Permission Permission { get; private set; } = null!;
+    public Role Role { get; set; } = null!;
 
-    private RolePermission() { }
-    
-    public RolePermission(int roleId, int permissionId)
-    {
-        RoleId = roleId;
-        PermissionId = permissionId;
-    }
+    public int PermissionId { get; set; }
+
+    public Permission Permission { get; set; } = null!;
 }
