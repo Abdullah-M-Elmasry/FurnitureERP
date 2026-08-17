@@ -86,7 +86,8 @@ builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IPasswordService, PasswordService>();
 builder.Services.AddScoped<IJwtService, JwtService>();
 
-
+Console.WriteLine(
+    $"JWT Key exists: {!string.IsNullOrWhiteSpace(builder.Configuration["Jwt:Key"])}");
 
 
 builder.Services.AddAuthentication(options =>
@@ -122,11 +123,8 @@ var app = builder.Build();
 app.UseMiddleware<ExceptionMiddleware>();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+app.UseSwagger();
+app.UseSwaggerUI();
 
 app.UseHttpsRedirection();
 

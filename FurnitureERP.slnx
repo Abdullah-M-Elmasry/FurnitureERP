@@ -1,7 +1,7 @@
 <Solution>
-  <Project Path="FurnitureERP.API/FurnitureERP.API.csproj" Id="ee647879-0a85-4057-b025-465361100568" />
-  <Project Path="FurnitureERP.Application/FurnitureERP.Application.csproj" />
-  <Project Path="FurnitureERP.Domain/FurnitureERP.Domain.csproj" />
-  <Project Path="FurnitureERP.Infrastructure/FurnitureERP.Infrastructure.csproj" />
-  <Project Path="FurnitureERP.UI/FurnitureERP.UI.csproj" />
+  <Project Path="E:/Projects/visual studio/FurnitureERP/FurnitureERP.API/FurnitureERP.API.csproj" Id="ee647879-0a85-4057-b025-465361100568" />
+  <Project Path="E:/Projects/visual studio/FurnitureERP/FurnitureERP.Application/FurnitureERP.Application.csproj" />
+  <Project Path="E:/Projects/visual studio/FurnitureERP/FurnitureERP.Domain/FurnitureERP.Domain.csproj" />
+  <Project Path="E:/Projects/visual studio/FurnitureERP/FurnitureERP.Infrastructure/FurnitureERP.Infrastructure.csproj" />
+  <Project Path="E:/Projects/visual studio/FurnitureERP/FurnitureERP.UI/FurnitureERP.UI.csproj" />
 </Solution>

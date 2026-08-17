@@ -7,11 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Remove="appsettings.json" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Include="appsettings.json" />
+    <Content Update="appsettings.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToPublishDirectory>Always</CopyToPublishDirectory>
+    </Content>
   </ItemGroup>
 
   <ItemGroup>
@@ -22,7 +21,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\FurnitureERP.Application\FurnitureERP.Application.csproj" />
-    <ProjectReference Include="..\FurnitureERP.Domain\FurnitureERP.Domain.csproj" />              
+    <ProjectReference Include="..\FurnitureERP.Domain\FurnitureERP.Domain.csproj" />
     <ProjectReference Include="..\FurnitureERP.Infrastructure\FurnitureERP.Infrastructure.csproj" />
   </ItemGroup>
 

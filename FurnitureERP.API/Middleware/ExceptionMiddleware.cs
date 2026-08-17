@@ -20,6 +20,8 @@ namespace FurnitureERP.API.Middleware
             }
             catch (Exception ex)
             {
+                Console.WriteLine(ex.ToString());
+
                 context.Response.ContentType = "application/json";
                 context.Response.StatusCode = StatusCodes.Status500InternalServerError;
 
